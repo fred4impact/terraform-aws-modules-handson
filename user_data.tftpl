@@ -1,0 +1,9 @@
+# #!/bin/bash
+
+# # Generated from Terraform templatefile
+
+# %{for package in packages ~}
+# sudo yum install -y ${package.name}
+# echo "${package.name} version:"
+# ${package.version_cmd}
+# %{endfor ~}
