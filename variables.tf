@@ -28,6 +28,9 @@ variable "key_name" {
   description = "SSH key pair name"
   default     = "your-key-pair"
 }
+variable "vpc_name" {
+  description = "The Name of the VPC"
+}
 
 # variable "db_name" {
 #   description = "RDS database name"

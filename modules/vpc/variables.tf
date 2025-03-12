@@ -3,7 +3,7 @@ variable "vpc_cidr" {
   type        = string
 
   validation {
-    condition     = can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$", var.vpc_cidr))
+    condition     = can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/([0-9]|[1-2][0-9]|3[0-2])$", var.vpc_cidr))
     error_message = "The VPC CIDR must be a valid CIDR block (e.g., 10.0.0.0/16)."
   }
 }
@@ -14,16 +14,9 @@ variable "public_subnet_cidrs" {
 
   validation {
     condition = alltrue([
-      for cidr in var.public_subnet_cidrs : can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$", cidr))
+      for cidr in var.public_subnet_cidrs : can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/([0-9]|[1-2][0-9]|3[0-2])$", cidr))
     ])
     error_message = "Each public subnet CIDR must be a valid CIDR block (e.g., 10.0.1.0/24)."
-  }
-
-  validation {
-    condition = alltrue([
-      for cidr in var.public_subnet_cidrs : cidrsubnet(var.vpc_cidr, 0, 0) == cidrsubnet(cidr, 0, 0)
-    ])
-    error_message = "All public subnet CIDRs must be within the VPC CIDR range."
   }
 }
 
@@ -33,15 +26,12 @@ variable "private_subnet_cidrs" {
 
   validation {
     condition = alltrue([
-      for cidr in var.private_subnet_cidrs : can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$", cidr))
+      for cidr in var.private_subnet_cidrs : can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/([0-9]|[1-2][0-9]|3[0-2])$", cidr))
     ])
     error_message = "Each private subnet CIDR must be a valid CIDR block (e.g., 10.0.3.0/24)."
   }
+}
 
-  validation {
-    condition = alltrue([
-      for cidr in var.private_subnet_cidrs : cidrsubnet(var.vpc_cidr, 0, 0) == cidrsubnet(cidr, 0, 0)
-    ])
-    error_message = "All private subnet CIDRs must be within the VPC CIDR range."
-  }
+variable "vpc_name" {
+  description = "The Name of the VPC"
 }
