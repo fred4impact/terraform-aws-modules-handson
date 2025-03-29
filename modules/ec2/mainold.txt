@@ -1,0 +1,76 @@
+resource "aws_instance" "web" {
+
+  # count = length(var.public_subnets)
+  count = 3
+
+  ami           = data.aws_ami.ubuntu_ami.id
+  instance_type = var.instance_type
+  # subnet_id              = var.public_subnets[count.index]
+  subnet_id              = var.public_subnets
+  key_name               = aws_key_pair.terraform.key_name
+  vpc_security_group_ids = var.vpc_security_group_ids
+  iam_instance_profile   = var.iam_instance_profile
+  user_data              = base64encode(file("${path.module}/install.sh"))
+
+
+  # Use the variable
+
+  # Upload the script to the EC2 instance
+  # provisioner "file" {
+  #   source      = "install.sh"
+  #   destination = "/tmp/install.sh"
+
+  #   connection {
+  #     type        = "ssh"
+  #     user        = "ubuntu"
+  #     private_key = file("~/.ssh/terraform-key")
+  #     host        = self.public_ip
+  #   }
+  # }
+
+
+  # # Execute the script on the EC2 instance
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "chmod +x /tmp/install.sh",
+  #     "sudo /tmp/install.sh"
+  #   ]
+
+  #   connection {
+  #     type        = "ssh"
+  #     user        = "ubuntu"
+  #     private_key = file("~/.ssh/terraform-key.pub")
+  #     host        = self.public_ip
+
+  #     agent        = false
+  #     bastion_host = null
+  #   }
+  # }
+
+  tags = {
+    Name    = "web-instance-${count.index}"
+    Project = var.project
+    App     = var.app_name
+  }
+
+}
+
+
+
+data "aws_ami" "ubuntu_ami" {
+  most_recent = true
+  owners      = ["099720109477"]
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
+  }
+}
+
+resource "aws_key_pair" "terraform" {
+  key_name   = "terraform-key"
+  public_key = file("~/.ssh/terraform-key.pub")
+}
+
+
+

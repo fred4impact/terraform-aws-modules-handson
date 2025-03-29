@@ -32,6 +32,26 @@ variable "vpc_name" {
   description = "The Name of the VPC"
 }
 
+variable "iam_instance_profile" {
+  description = "IAM instance profile name"
+  type        = string
+}
+
+
+variable "project" {
+  description = "Project name"
+  type        = string
+}
+variable "app_name" {
+  description = "Application name"
+  type        = string
+}
+
+
+
+
+
+
 # variable "db_name" {
 #   description = "RDS database name"
 #   default     = "mydb"
