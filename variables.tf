@@ -48,7 +48,13 @@ variable "app_name" {
 }
 
 
+variable "is_iam_role_enebled" {
+  type = bool
+}
 
+variable "is_ec2_instance_enabled" {
+  type = bool
+}
 
 
 

@@ -1,5 +1,6 @@
 resource "aws_instance" "web" {
-  count = 1
+  # count = 3
+  count = var.is_ec2_instance_enabled == true ? 1 : 0
 
   ami           = data.aws_ami.ubuntu_ami.id
   instance_type = var.instance_type

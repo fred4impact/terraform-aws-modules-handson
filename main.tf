@@ -104,20 +104,23 @@ module "ec2" {
   public_subnets       = module.vpc.public_subnets
   instance_type        = var.instance_type
   key_name             = var.key_name
-  iam_instance_profile = module.iam.ec2_instance_profile_name
+  iam_instance_profile = "ec2-instance-profile"
   vpc_security_group_ids = [
     module.https_sg.security_group_id,
     module.http_sg.security_group_id,
     module.ssh_sg.security_group_id
   ]
-  project  = var.project
-  app_name = var.app_name
+  project                 = var.project
+  app_name                = var.app_name
+  is_ec2_instance_enabled = var.is_ec2_instance_enabled
+
 }
 
 
 
 module "iam" {
-  source = "./modules/iam"
+  source              = "./modules/iam"
+  is_iam_role_enebled = var.is_iam_role_enebled
 }
 
 # module "alb" {

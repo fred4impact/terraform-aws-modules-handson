@@ -39,3 +39,6 @@ variable "app_name" {
 }
 
 
+variable "is_ec2_instance_enabled" {
+  type = bool
+}
